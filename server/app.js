@@ -28,7 +28,7 @@ module.exports = async () => {
 
     sock.connect(zmqNodeAddress);
     console.log('Connected to ' + zmqNodeAddress);
-    sock.subscribe('sn'); // sn = confirmed tx
+    // sock.subscribe('sn'); // sn = confirmed tx
     sock.subscribe(address); // subscribe to own address
     console.log('Subscribed to messages...');
     sock.on('message',(msg) => {
