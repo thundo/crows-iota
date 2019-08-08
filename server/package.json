@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@iota/core": "^1.0.0-beta.21",
-    "config": "^3.2.2"
+    "config": "^3.2.2",
+    "zeromq": "^5.1.0"
   }
 }
