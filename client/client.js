@@ -2,11 +2,13 @@
 
 const {composeAPI} = require('@iota/core');
 const config = require('config');
+const {asTransactionObject} = require('@iota/transaction-converter')
 
 console.log(config);
 
 const nodeAddress = 'https://nodes.devnet.iota.org:443';
-const zmqNodeAddress = 'tcp://zmq.devnet.iota.org:5556';
+const depth = 3;
+const minWeightMagnitude = 9;
 
 module.exports = async () => {
     // Node connection
@@ -20,26 +22,17 @@ module.exports = async () => {
         console.log('Node is probably synced!');
     }
 
-    // Address deterministic generation
-    const serverAddress = await iota.getNewAddress(config.seed, {index: 0});
-    console.log(serverAddress);
-
-    // const sendingAddress = await iota.getNewAddress(config.seed, {index: 1});
-    // console.log(sendingAddress);
-
-    const accountData = await iota.getAccountData(config.seed, {end: 10});
+    const accountData = await iota.getAccountData(config.seed);
     console.log(accountData);
+    console.log(accountData.addresses[0]);
 
-    const transfers = [
-        {
-            value: 500,
-            address: serverAddress,
-            tag: 'MYMAGIC'
-        }
-    ];
-    const trytes = await iota.prepareTransfers(config.seed, transfers);
-    const response = await iota.sendTrytes(trytes, 3, 9);
+    const transfers = [{
+        value: 500,
+        address: accountData.addresses[0],
+        tag: 'THUNDOWASHERE',
+    }];
+    const trytes = await iota.prepareTransfers(config.seed, transfers, {});
+    const bundle  = await iota.sendTrytes(trytes, depth, minWeightMagnitude);
 
-    console.log('Bundle sent');
-    response.map(tx => console.log(tx));
+    console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
 };
