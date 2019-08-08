@@ -1,5 +1,5 @@
 {
-  "name": "crows-server",
+  "name": "@crows/server",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Diego Ferri <ferri.diego@gmail.com>",

@@ -36,5 +36,5 @@ module.exports = async () => {
         console.log(data);
         console.log(`Transaction confirmed by milestone index: ${data[1]}` );
         console.log(`Transaction hash: ${data[2]}` );
-    })
+    });
 };
