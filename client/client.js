@@ -1,14 +1,12 @@
 'use strict';
 
 const {composeAPI} = require('@iota/core');
-const {asciiToTrytes} = require('@iota/converter');
 const config = require('config');
+const utils = require('../core/utils');
 
 console.log(config);
 
 const nodeAddress = 'https://nodes.devnet.iota.org:443';
-const depth = 3;
-const minWeightMagnitude = 9;
 
 module.exports = async () => {
     // Node connection
@@ -31,18 +29,5 @@ module.exports = async () => {
         dt: Date.now()
     };
 
-    console.log(message);
-    console.log(asciiToTrytes(JSON.stringify(message)));
-    console.log(asciiToTrytes(JSON.stringify(message)).length);
-
-    const transfers = [{
-        value: 0,
-        address: config.serverAddress,
-        tag: 'CROWS',
-        message: asciiToTrytes(JSON.stringify(message)),
-    }];
-    const trytes = await iota.prepareTransfers(config.seed, transfers, {});
-    const bundle  = await iota.sendTrytes(trytes, depth, minWeightMagnitude);
-
-    console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
+    await utils.sendZeroValueTx(iota, config.seed, config.serverAddress, message);
 };

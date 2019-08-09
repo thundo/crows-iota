@@ -5,6 +5,8 @@ const depth = 3;
 const minWeightMagnitude = 9;
 
 const sendZeroValueTx = async (provider, seed, recipient, data) => {
+    console.log(asciiToTrytes(JSON.stringify(data)));
+    console.log(asciiToTrytes(JSON.stringify(data)).length);
     const transfers = [{
         value: 0,
         address: recipient,
