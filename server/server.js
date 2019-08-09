@@ -1,6 +1,6 @@
 'use strict';
 
-const {composeAPI} = require('@iota/core');
+const {composeAPI, generateAddress} = require('@iota/core');
 const config = require('config');
 const zmq = require('zeromq');
 const sock = zmq.socket('sub');
@@ -27,7 +27,7 @@ module.exports = async () => {
     }
 
     // Address deterministic generation
-    const dataAddress = await iota.generateAddress(config.seed, 0);
+    const dataAddress = await generateAddress(config.seed, 0, 2);
     console.log(dataAddress);
 
     sock.connect(zmqNodeAddress);
