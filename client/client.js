@@ -2,7 +2,6 @@
 
 const {composeAPI} = require('@iota/core');
 const config = require('config');
-const {asTransactionObject} = require('@iota/transaction-converter')
 
 console.log(config);
 
