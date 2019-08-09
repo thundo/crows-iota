@@ -1,2 +1,7 @@
 {
+    "seed": "BEUMDYCNBYTDAETCRTJXOMSWSIAZMI9JKMKB99LNGCJLVIQWQOS9PRYVFTTBUVVFMSSURWICFTCULNIGQ",
+    "depth": 3,
+    "minWeightMagnitude": 9,
+    "security": 2,
+    "iriUri": "https://nodes.devnet.iota.org:443"
 }

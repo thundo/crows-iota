@@ -1,17 +1,19 @@
 'use strict';
 
 const config = require('config');
-const {getProvider, sendZeroValueTx} = require('../core/utils');
+const Iota = require('../core/iota');
 
 console.log(config);
 
 module.exports = async () => {
-    const iota = await getProvider();
+    const iota = new Iota();
+    await iota.initialize();
+    const provider = iota.getProvider();
 
-    const accountData = await iota.getAccountData(config.seed);
+    const accountData = await provider.getAccountData(config.seed);
     console.log(accountData);
 
-    console.log(await iota.getNewAddress(config.seed));
+    console.log(await provider.getNewAddress(config.seed));
 
     const message = {
         temperature: 28.5,
@@ -19,5 +21,5 @@ module.exports = async () => {
         dt: Date.now()
     };
 
-    await sendZeroValueTx(iota, config.seed, config.serverAddress, message);
+    await iota.sendZeroValueTx(config.seed, config.serverAddress, message);
 };

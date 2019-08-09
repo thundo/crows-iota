@@ -1,14 +1,13 @@
 'use strict';
 
-const {composeAPI, generateAddress} = require('@iota/core');
 const {extractJson} = require('@iota/extract-json');
 const config = require('config');
 const zmq = require('zeromq');
 const sock = zmq.socket('sub');
+const Iota = require('../core/iota');
 
 console.log(config);
 
-const nodeAddress = 'https://nodes.devnet.iota.org:443';
 const zmqNodeAddress = 'tcp://zmq.devnet.iota.org:5556';
 
 const members = [];
@@ -16,19 +15,12 @@ const payments = [];
 const data = [];
 
 module.exports = async () => {
-    // Node connection
-    const iota = composeAPI({
-        provider: nodeAddress,
-    });
-    const nodeInfo = await iota.getNodeInfo();
-    if (Math.abs(nodeInfo['latestMilestoneIndex'] - nodeInfo['latestSolidSubtangleMilestoneIndex']) > 3) {
-        throw new Error('Node is probably not synced!');
-    } else {
-        console.log('Node is probably synced!');
-    }
+    const iota = new Iota();
+    await iota.initialize();
+    const provider = iota.getProvider();
 
     // Address deterministic generation
-    const dataAddress = await generateAddress(config.seed, 0, 2);
+    const dataAddress = await iota.generateAddress(config.seed, 0);
     console.log(dataAddress);
 
     sock.connect(zmqNodeAddress);
@@ -42,7 +34,7 @@ module.exports = async () => {
         console.log(`Tx hash: ${data[1]}`);
         console.log(`Tx milestone: ${data[2]}`);
         console.log(`Tx type: ${data[3]}`);
-        const a = await iota.getTransactionObjects([data[1]]);
+        const a = await provider.getTransactionObjects([data[1]]);
         console.log(a);
         console.log(extractJson(a))
         /*
