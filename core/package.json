@@ -1,0 +1,19 @@
+{
+  "name": "@crows/core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@gitlab.looptribe.com:thundo/crows-iota.git",
+  "author": "Diego Ferri <ferri.diego@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint . --color --ext .js"
+  },
+  "dependencies": {
+    "@iota/converter": "^1.0.0-beta.21",
+    "config": "^3.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-google": "^0.13.0"
+  }
+}
