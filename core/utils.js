@@ -1,8 +1,7 @@
 'use strict';
 
 const {asciiToTrytes} = require('@iota/converter');
-const depth = 3;
-const minWeightMagnitude = 9;
+const config = require('config');
 
 const sendZeroValueTx = async (provider, seed, recipient, data) => {
     console.log(asciiToTrytes(JSON.stringify(data)));
@@ -14,7 +13,7 @@ const sendZeroValueTx = async (provider, seed, recipient, data) => {
         message: asciiToTrytes(JSON.stringify(data)),
     }];
     const trytes = await provider.prepareTransfers(seed, transfers, {});
-    const bundle = await provider.sendTrytes(trytes, depth, minWeightMagnitude);
+    const bundle = await provider.sendTrytes(trytes, config.depth, config.minWeightMagnitude);
     console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
     return bundle[0].hash;
 };
