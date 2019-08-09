@@ -1,6 +1,7 @@
 'use strict';
 
 const {composeAPI, generateAddress} = require('@iota/core');
+const {extractJson} = require('@iota/extract-json');
 const config = require('config');
 const zmq = require('zeromq');
 const sock = zmq.socket('sub');
@@ -43,6 +44,7 @@ module.exports = async () => {
         console.log(`Tx type: ${data[3]}`);
         const a = await iota.getTransactionObjects([data[1]]);
         console.log(a);
+        console.log(extractJson(a))
         /*
         [{
             hash: 'ISVTKARPY9OQDADCRVVGZHIGVLEXJOBGBRBBN9MIRSUEUURSMMYSOFWLWZADRLTJOYLIEPOTEWDXDB999',

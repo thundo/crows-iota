@@ -79,6 +79,13 @@
   resolved "https://registry.yarnpkg.com/@iota/curl/-/curl-1.0.0-beta.19.tgz#7c30bec4c7225eaf1a691802251c9199177a54a8"
   integrity sha512-bUr6VW8lP1XYhAkzUacc8U28qO2Ibdl6R5CSF7N34GgjO2sEkn4DnlzL1VU8cCv+8rfBlZ9qIvYGzklic49JJw==
 
+"@iota/extract-json@^1.0.0-beta.21":
+  version "1.0.0-beta.21"
+  resolved "https://registry.yarnpkg.com/@iota/extract-json/-/extract-json-1.0.0-beta.21.tgz#b94c8190ff66a2742088cf147a70a501f0aceee9"
+  integrity sha512-PIesfQCbjk5iextzVz2x+sB2OVBoXjb4rozCOzUjA1kjajnJEJlp9QuuBcJcNei7Czfm95RhpMqr19gUptIdgg==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.21"
+
 "@iota/http-client@^1.0.0-beta.21":
   version "1.0.0-beta.21"
   resolved "https://registry.yarnpkg.com/@iota/http-client/-/http-client-1.0.0-beta.21.tgz#0a0fc5962b16818e872abad8af060bf8ee5b342d"
