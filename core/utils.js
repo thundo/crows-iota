@@ -1,7 +1,21 @@
 'use strict';
 
+const {composeAPI} = require('@iota/core');
 const {asciiToTrytes} = require('@iota/converter');
 const config = require('config');
+
+const getProvider = async () => {
+    const iota = await composeAPI({
+        provider: config.iriUri,
+    });
+    const nodeInfo = await iota.getNodeInfo();
+    if (Math.abs(nodeInfo['latestMilestoneIndex'] - nodeInfo['latestSolidSubtangleMilestoneIndex']) > 3) {
+        throw new Error('Node is probably not synced!');
+    } else {
+        console.log('Node is probably synced!');
+    }
+    return iota;
+};
 
 const sendZeroValueTx = async (provider, seed, recipient, data) => {
     console.log(asciiToTrytes(JSON.stringify(data)));
@@ -19,5 +33,6 @@ const sendZeroValueTx = async (provider, seed, recipient, data) => {
 };
 
 module.exports = {
+    getProvider,
     sendZeroValueTx,
 };
