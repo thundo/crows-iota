@@ -2,7 +2,6 @@
 
 
 const config = require('config');
-const constants = require('../core/constants');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
@@ -19,13 +18,14 @@ class Server {
         this.app.use(cors({
             origin: '*'
         }));
-        this.app.use((req, res, next) => {
-            res.err = (err) => {
-                const result = {error: true};
-                result.message = err;
-                res.send(result);
+        this.app.use((err, req, res, next) => {
+            const result = {
+                message: err.message,
+                payload: err.payload,
             };
-            next();
+            const status = result.code || 500;
+            console.error(`ErrorMiddleware caught an error code=${result.code} status=${result.status}: ${err} `);
+            res.status(status).send(result);
         });
 
         this.dlt = new Dlt();
