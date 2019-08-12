@@ -6,14 +6,10 @@ const constants = require('../core/constants');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
-const api = require('./api');
+const createApi = require('./api');
 const Dlt = require('./dlt');
 
 console.log(config);
-
-const members = [];
-const payments = [];
-const data = [];
 
 class Server {
     constructor() {
@@ -33,10 +29,14 @@ class Server {
         });
 
         this.dlt = new Dlt();
+
+        this.members = {};
+        this.payments = [];
+        this.data = [];
     }
 
     async start() {
-        this.app.use('/api', api);
+        this.app.use('/api', createApi(this.members));
         this.web = this.app.listen(this.app.get('port'), () => {
             console.log('HTTP web started on port %d.', this.app.get('port'));
         });
