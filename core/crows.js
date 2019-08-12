@@ -18,7 +18,7 @@ class Crows {
             longitude: config.longitude,
             altitude: config.altitude,
         };
-        return await this.iota.sendZeroValueTx(config.seed, config.serverAddress, req);
+        return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
     }
 
     async measure() {
@@ -28,7 +28,7 @@ class Crows {
             humidity: 63.3,
             dt: Date.now()
         };
-        return await this.iota.sendZeroValueTx(config.seed, config.serverAddress, req);
+        return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
     }
 }
 

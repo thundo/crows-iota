@@ -14,10 +14,10 @@ module.exports = async () => {
 
     await crows.register();
 
-    const accountData = await provider.getAccountData(config.seed);
+    const accountData = await provider.getAccountData(config.iota.seed);
     console.log(accountData);
 
-    console.log(await provider.getNewAddress(config.seed));
+    console.log(await provider.getNewAddress(config.iota.seed));
 
     await crows.measure();
 };

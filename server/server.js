@@ -21,7 +21,7 @@ module.exports = async () => {
     const provider = iota.getProvider();
 
     // Address deterministic generation
-    const dataAddress = await iota.generateAddress(config.seed, 0);
+    const dataAddress = await iota.generateAddress(config.iota.seed, 0);
     console.log(dataAddress);
 
     sock.connect(zmqNodeAddress);

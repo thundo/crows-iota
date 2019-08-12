@@ -2,7 +2,7 @@
 
 const {composeAPI, generateAddress} = require('@iota/core');
 const {asciiToTrytes} = require('@iota/converter');
-const config = require('config');
+const config = require('config').iota;
 
 class Iota {
     constructor() {
