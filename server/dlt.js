@@ -4,7 +4,7 @@ const {extractJson} = require('@iota/extract-json');
 const zmq = require('zeromq');
 const Iota = require('../core/iota');
 const config = require('config').iota;
-
+const constants = require('../core/constants');
 
 class Dlt {
     constructor() {
