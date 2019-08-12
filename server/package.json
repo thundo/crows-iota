@@ -5,6 +5,7 @@
   "author": "Diego Ferri <ferri.diego@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon -e js,json",
     "lint": "eslint . --color --ext .js"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^6.1.0",
-    "eslint-config-google": "^0.13.0"
+    "eslint-config-google": "^0.13.0",
+    "nodemon": "^1.19.1"
   }
 }
