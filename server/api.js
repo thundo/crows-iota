@@ -15,16 +15,17 @@ module.exports = (members) => {
         latitude: yup.number().required(),
         longitude: yup.number().required(),
         altitude: yup.number().required(),
-        adddress: yup.string().required(),
+        payment_address: yup.string().required(),
     });
 
     router.post('/stations', async (req, res) => {
-        const isValid = await newStationRequestValidator.isValid(req.body);
-        console.log(isValid)
-        if (!isValid) {
-            const e = new Error('Invalid request');
-            e.code = HttpStatus.BAD_REQUEST;
-            throw e;
+        try {
+            await newStationRequestValidator.validate(req.body);
+        }
+        catch (e) {
+            let err = new Error(e.errors);
+            err.code = HttpStatus.BAD_REQUEST;
+            throw err;
         }
 
         const id = nanoid();
@@ -32,7 +33,7 @@ module.exports = (members) => {
             ID: id,
             updated_at: new Date(),
             created_at: new Date(),
-        }, pick(req.body, ['external_id', 'name', 'latitude', 'longitude', 'altitude', 'address']));
+        }, pick(req.body, ['external_id', 'name', 'latitude', 'longitude', 'altitude', 'payment_address']));
 
         members[id] = station;
 

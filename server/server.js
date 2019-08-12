@@ -1,6 +1,5 @@
 'use strict';
 
-
 const config = require('config');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,31 +11,31 @@ console.log(config);
 
 class Server {
     constructor() {
+        this.members = {};
+        this.payments = [];
+        this.data = [];
+
         this.app = express();
         this.app.set('port', config.web.port);
         this.app.use(bodyParser.json());
         this.app.use(cors({
             origin: '*'
         }));
+        this.app.use('/api', createApi(this.members));
         this.app.use((err, req, res, next) => {
             const result = {
                 message: err.message,
                 payload: err.payload,
             };
-            const status = result.code || 500;
+            const status = err.code || 500;
             console.error(`ErrorMiddleware caught an error code=${result.code} status=${result.status}: ${err} `);
             res.status(status).send(result);
         });
 
         this.dlt = new Dlt();
-
-        this.members = {};
-        this.payments = [];
-        this.data = [];
     }
 
     async start() {
-        this.app.use('/api', createApi(this.members));
         this.web = this.app.listen(this.app.get('port'), () => {
             console.log('HTTP web started on port %d.', this.app.get('port'));
         });
