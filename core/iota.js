@@ -2,6 +2,7 @@
 
 const {composeAPI, generateAddress} = require('@iota/core');
 const {asciiToTrytes} = require('@iota/converter');
+const {isValidChecksum} = require('@iota/checksum');
 const config = require('config').iota;
 
 class Iota {
@@ -42,6 +43,11 @@ class Iota {
 
     async generateAddress(seed, index) {
         return generateAddress(seed, index, config.security);
+    }
+
+    static isAddressValid(address) {
+        return /^[A-Z9]{81}$/.test(address) ||
+            (/^[A-Z9]{90}$/.test(address) && isValidChecksum(address));
     }
 
 }

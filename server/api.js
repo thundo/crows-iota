@@ -5,6 +5,7 @@ const nanoid = require('nanoid');
 const HttpStatus = require('http-status-codes');
 const pick = require('lodash.pick');
 const yup = require('yup');
+const {isAddressValid} = require('../core/iota');
 
 module.exports = (members) => {
     const router = createRouter();
@@ -16,7 +17,7 @@ module.exports = (members) => {
             latitude: yup.number().required(),
             longitude: yup.number().required(),
             altitude: yup.number().required(),
-            payment_address: yup.string().required(),
+            payment_address: yup.string().test('isAddressValid', 'Invalid Iota address', (value) => isAddressValid(value)).required(),
         });
 
         try {
@@ -42,8 +43,8 @@ module.exports = (members) => {
 
     router.put('/stations/:id', async (req, res) => {
         const editStationRequestValidator = yup.object().shape({
-            current_address: yup.string().required(),
-            payment_address: yup.string().required(),
+            current_address: yup.string().test('isAddressValid', 'Invalid Iota address', (value) => isAddressValid(value)).required(),
+            payment_address: yup.string().test('isAddressValid', 'Invalid Iota address', (value) => isAddressValid(value)).required(),
         });
 
         try {
