@@ -1,9 +1,7 @@
 'use strict';
 
-const COMMAND_REGISTRATION = 0;
-const COMMAND_MEASUREMENT = 1;
+const COMMAND_MEASUREMENT = 0;
 
 module.exports = {
-    COMMAND_REGISTRATION,
-    COMMAND_MEASUREMENT
+    COMMAND_MEASUREMENT,
 };

@@ -36,9 +36,6 @@ class Dlt {
             const message = extractJson(tx);
             console.log(message)
             switch (message.command) {
-                case constants.COMMAND_REGISTRATION:
-                    console.log('Registration');
-                    break;
                 case constants.COMMAND_MEASUREMENT:
                     console.log('Measurement');
                     break;
