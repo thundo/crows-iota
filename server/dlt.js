@@ -26,7 +26,7 @@ class Dlt {
         this.sock.subscribe(dataAddress); // subscribe to data address
         console.log(`Subscribed to ${dataAddress} updates...`);
         this.sock.on('message', async (msg) => {
-            let data = msg.toString().split(' ');
+            const data = msg.toString().split(' ');
             console.log(`Tx address: ${data[0]}`);
             console.log(`Tx hash: ${data[1]}`);
             console.log(`Tx milestone: ${data[2]}`);
@@ -34,13 +34,12 @@ class Dlt {
             const tx = await provider.getTransactionObjects([data[1]]);
             // console.log(tx);
             const message = extractJson(tx);
-            console.log(message)
+            console.log(message);
             switch (message.command) {
                 case constants.COMMAND_MEASUREMENT:
                     console.log('Measurement');
                     break;
             }
-
         });
     }
 

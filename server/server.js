@@ -19,7 +19,7 @@ class Server {
         this.app.set('port', config.web.port);
         this.app.use(bodyParser.json());
         this.app.use(cors({
-            origin: '*'
+            origin: '*',
         }));
         this.app.use('/api', createApi(this.members));
         this.app.use((err, req, res, next) => {

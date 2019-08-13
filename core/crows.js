@@ -6,7 +6,7 @@ const nanoid = require('nanoid');
 
 
 class Crows {
-    constructor (iota) {
+    constructor(iota) {
         this.iota = iota;
     }
     async register() {
@@ -26,7 +26,7 @@ class Crows {
             command: constants.COMMAND_MEASUREMENT,
             temperature: 28.5,
             humidity: 63.3,
-            dt: Date.now()
+            dt: Date.now(),
         };
         return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
     }

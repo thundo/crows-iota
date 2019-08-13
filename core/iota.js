@@ -49,6 +49,5 @@ class Iota {
         return /^[A-Z9]{81}$/.test(address) ||
             (/^[A-Z9]{90}$/.test(address) && isValidChecksum(address));
     }
-
 }
 module.exports = Iota;

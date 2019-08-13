@@ -22,9 +22,8 @@ module.exports = (members) => {
 
         try {
             await newStationRequestValidator.validate(req.body);
-        }
-        catch (e) {
-            let err = new Error(e.errors);
+        } catch (e) {
+            const err = new Error(e.errors);
             err.code = HttpStatus.BAD_REQUEST;
             throw err;
         }
@@ -49,9 +48,8 @@ module.exports = (members) => {
 
         try {
             await editStationRequestValidator.validate(req.body);
-        }
-        catch (e) {
-            let err = new Error(e.errors);
+        } catch (e) {
+            const err = new Error(e.errors);
             err.code = HttpStatus.BAD_REQUEST;
             throw err;
         }
@@ -59,13 +57,13 @@ module.exports = (members) => {
         if (!members[req.params.id] ||
             members[req.params.id].payment_address !== req.body.current_address
         ) {
-            let err = new Error('Missing station');
+            const err = new Error('Missing station');
             err.code = HttpStatus.NOT_FOUND;
             throw err;
         }
         members[req.params.id].payment_address = req.body.payment_address;
 
-        res.status(HttpStatus.NO_CONTENT).end()
+        res.status(HttpStatus.NO_CONTENT).end();
     });
 
     return router;
