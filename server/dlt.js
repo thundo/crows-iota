@@ -8,9 +8,10 @@ const constants = require('../core/constants');
 const omit = require('lodash.omit');
 
 class Dlt {
-    constructor(data) {
+    constructor(members, data, payments) {
         this.iota = new Iota();
         this.sock = zmq.socket('sub');
+        this.members = members;
         this.data = data;
     }
 
@@ -34,12 +35,16 @@ class Dlt {
             console.log(`Tx milestone: ${data[2]}`);
             console.log(`Tx type: ${data[3]}`);
             const tx = await provider.getTransactionObjects([data[1]]);
-            // console.log(tx);
-            const message = extractJson(tx);
+            const message = JSON.parse(extractJson(tx));
             console.log(message);
+            if (!this.members[message.station_id]) {
+                console.error('Invalid station id');
+                return;
+            }
             switch (message.command) {
                 case constants.COMMAND_MEASUREMENT:
                     this.data.push(omit(message, ['command']));
+                    this.members[message.station_id].unpaid_measurements++;
                     break;
             }
         });

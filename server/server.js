@@ -12,8 +12,8 @@ console.log(config);
 class Server {
     constructor() {
         this.members = {};
-        this.payments = [];
         this.data = [];
+        this.payments = [];
 
         this.app = express();
         this.app.set('port', config.web.port);
@@ -32,7 +32,7 @@ class Server {
             res.status(status).send(result);
         });
 
-        this.dlt = new Dlt(this.data);
+        this.dlt = new Dlt(this.members, this.data, this.payments);
     }
 
     async start() {

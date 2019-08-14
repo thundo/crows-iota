@@ -8,6 +8,7 @@ class Crows {
     constructor(iota) {
         this.iota = iota;
         this.stationId = null;
+        this.intervalId = null;
     }
     async register(paymentAddress) {
         const client = axios.create();
@@ -30,14 +31,16 @@ class Crows {
     }
 
     async measure() {
-        return Promise.resolve();
-        const req = {
-            command: constants.COMMAND_MEASUREMENT,
-            temperature: 28.5,
-            humidity: 63.3,
-            dt: Date.now(),
-        };
-        return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
+        this.intervalId = setInterval(async () => {
+            const req = {
+                command: constants.COMMAND_MEASUREMENT,
+                temperature: 28.5,
+                humidity: 63.3,
+                dt: Date.now(),
+                station_id: this.stationId,
+            };
+            return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
+        }, config.crows.measurementInterval);
     }
 }
 

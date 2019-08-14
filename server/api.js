@@ -34,6 +34,7 @@ module.exports = (members) => {
             station_id: id,
             updated_at: new Date(),
             created_at: new Date(),
+            unpaid_measurements: 0,
         }, pick(req.body, ['external_id', 'name', 'latitude', 'longitude', 'altitude', 'payment_address']));
 
         members[id] = station;
