@@ -5,11 +5,13 @@ const zmq = require('zeromq');
 const Iota = require('../core/iota');
 const config = require('config').iota;
 const constants = require('../core/constants');
+const omit = require('lodash.omit');
 
 class Dlt {
-    constructor() {
+    constructor(data) {
         this.iota = new Iota();
         this.sock = zmq.socket('sub');
+        this.data = data;
     }
 
     async start() {
@@ -37,7 +39,7 @@ class Dlt {
             console.log(message);
             switch (message.command) {
                 case constants.COMMAND_MEASUREMENT:
-                    console.log('Measurement');
+                    this.data.push(omit(message, ['command']));
                     break;
             }
         });

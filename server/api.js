@@ -6,6 +6,7 @@ const HttpStatus = require('http-status-codes');
 const pick = require('lodash.pick');
 const yup = require('yup');
 const {isAddressValid} = require('../core/iota');
+const util = require('util');
 
 module.exports = (members) => {
     const router = createRouter();
@@ -36,6 +37,8 @@ module.exports = (members) => {
         }, pick(req.body, ['external_id', 'name', 'latitude', 'longitude', 'altitude', 'payment_address']));
 
         members[id] = station;
+
+        console.log(`New station registered ${util.inspect(station, true, null)}`);
 
         res.status(HttpStatus.CREATED).send(station);
     });

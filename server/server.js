@@ -28,11 +28,11 @@ class Server {
                 payload: err.payload,
             };
             const status = err.code || 500;
-            console.error(`ErrorMiddleware caught an error code=${result.code} status=${result.status}: ${err} `);
+            console.error(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
             res.status(status).send(result);
         });
 
-        this.dlt = new Dlt();
+        this.dlt = new Dlt(this.data);
     }
 
     async start() {

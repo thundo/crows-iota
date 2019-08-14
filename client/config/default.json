@@ -5,5 +5,8 @@
         "depth": 3,
         "minWeightMagnitude": 9,
         "iriUri": "https://nodes.devnet.iota.org:443"
+    },
+    "crows": {
+        "baseUrl": "http://localhost:8080"
     }
 }
