@@ -14,8 +14,7 @@ module.exports = async () => {
     const accountData = await provider.getAccountData(config.iota.seed);
     console.log(accountData);
 
-    const newAddress = await provider.getNewAddress(config.iota.seed);
-    console.log(newAddress);
+    const newAddress = await iota.newAttachedAddress(config.iota.seed);
 
     const crows = new Crows(iota);
     await crows.register(newAddress);

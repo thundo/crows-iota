@@ -4,6 +4,7 @@
         "serverAddress": "VTMPVYGXMIMJHYROFIHYBODLIXZYMAUTOWVEURKSDSLEHPENKSCWXVJJWIJPBHVAZNFHIDNVTUBIYMCB9",
         "depth": 3,
         "minWeightMagnitude": 9,
+        "security": 2,
         "iriUri": "https://nodes.devnet.iota.org:443"
     },
     "crows": {

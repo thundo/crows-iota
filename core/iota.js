@@ -27,13 +27,11 @@ class Iota {
     }
 
     async sendZeroValueTx(seed, recipient, data) {
-        console.log(asciiToTrytes(JSON.stringify(data)));
-        console.log(asciiToTrytes(JSON.stringify(data)).length);
         const transfers = [{
             value: 0,
             address: recipient,
             tag: 'CROWS',
-            message: asciiToTrytes(JSON.stringify(data)),
+            message: data ? asciiToTrytes(JSON.stringify(data)) : null,
         }];
         const trytes = await this.provider.prepareTransfers(seed, transfers, {});
         const bundle = await this.provider.sendTrytes(trytes, config.depth, config.minWeightMagnitude);
@@ -48,6 +46,13 @@ class Iota {
     static isAddressValid(address) {
         return /^[A-Z9]{81}$/.test(address) ||
             (/^[A-Z9]{90}$/.test(address) && isValidChecksum(address));
+    }
+
+    async newAttachedAddress(seed) {
+        const newAddress = await this.provider.getNewAddress(seed, {security: config.security});
+        console.log(newAddress);
+        await this.sendZeroValueTx(seed, newAddress, null);
+        return newAddress;
     }
 }
 module.exports = Iota;

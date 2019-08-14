@@ -3,8 +3,6 @@
 const axios = require('axios');
 const config = require('config');
 const constants = require('../core/constants');
-const nanoid = require('nanoid');
-
 
 class Crows {
     constructor(iota) {
