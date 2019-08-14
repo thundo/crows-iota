@@ -6,6 +6,7 @@ const cors = require('cors');
 const express = require('express');
 const createApi = require('./api');
 const Dlt = require('./dlt');
+const Payer = require('./payer');
 
 console.log(config);
 
@@ -33,6 +34,7 @@ class Server {
         });
 
         this.dlt = new Dlt(this.members, this.data, this.payments);
+        this.payer = new Payer(this.members, this.payments);
     }
 
     async start() {
@@ -48,6 +50,7 @@ class Server {
             this.web = undefined;
         }
         this.dlt.dispose();
+        this.payer.dispose();
     }
 }
 

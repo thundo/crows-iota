@@ -8,7 +8,7 @@ const constants = require('../core/constants');
 const omit = require('lodash.omit');
 
 class Dlt {
-    constructor(members, data, payments) {
+    constructor(members, data) {
         this.iota = new Iota();
         this.sock = zmq.socket('sub');
         this.members = members;
