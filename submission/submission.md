@@ -7,4 +7,21 @@ This project is a PoC for a crowdsourced open weather system (CROWS), where owne
 
 
 Abuse detection is beyond the scope of this PoC. Patterns, PoW, ...
+No scalability
 
+
+## Setup for Weather Station (w/ ds18b20)
+- https://howchoo.com/g/m2qwytdmmjn/raspberry-pi-default-username-and-password
+- https://howchoo.com/g/mjk3m2e2njy/find-your-raspberry-pis-ip-address
+- https://pinout.xyz/pinout/1_wire
+
+`sudo raspi-config`
+images...
+
+`lsmod | grep w1`
+`ls -al /sys/bus/w1/devices`
+
+images with devices list and raw reading
+
+`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
+`sudo apt-get install -y nodejs`
