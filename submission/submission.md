@@ -8,6 +8,8 @@ This project is a PoC for a crowdsourced open weather system (CROWS), where owne
 
 Abuse detection is beyond the scope of this PoC. Patterns, PoW, ...
 No scalability
+No snapshot
+No persistence
 
 
 ## Setup for Weather Station (w/ ds18b20)
