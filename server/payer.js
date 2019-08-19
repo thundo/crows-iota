@@ -6,19 +6,29 @@ const config = require('config');
 
 class Payer {
     constructor (members, payments) {
-        function promiseProducer() {
-            for (let i = 0; i < members.length; i += 1) {
-                console.log(members[i]);
-                if (members[i].unpaid_measurements > config.crows.paymentThrehsold) {
-                }
-            }
-        }
+        this.members = members;
+        this.payments = payments;
+    }
 
+    start () {
+        const self = this;
         this.intervalId = setInterval(() => {
-            const pool = new PromisePool(promiseProducer, paymentConcurrentLimit);
+            const boundPromiseProducer = self._promiseProducer.bind(this);
+            const pool = new PromisePool(boundPromiseProducer, paymentConcurrentLimit);
             const poolPromise = pool.start();
+            // boundPromiseProducer();
+        }, config.crows.paymentInterval);
+    }
 
-        }, config.paymentInterval);
+    _promiseProducer() {
+        console.log('Running payer')
+        Object.entries(this.members).forEach(([k, v]) => {
+            console.log(k);
+            if (v.unpaid_measurements > config.crows.paymentThreshold) {
+                console.log(`Paying ${v.name} (#${k})`);
+                v.unpaid_measurements = 0;
+            }
+        });
     }
 
     dispose () {

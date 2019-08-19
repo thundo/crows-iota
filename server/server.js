@@ -42,6 +42,7 @@ class Server {
             console.log('HTTP web started on port %d.', this.app.get('port'));
         });
         this.dlt.start();
+        this.payer.start();
     }
 
     dispose() {
