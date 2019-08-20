@@ -39,7 +39,7 @@ class Crows {
                 dt: Date.now(),
                 station_id: this.stationId,
             };
-            return await this.iota.sendZeroValueTx(config.iota.seed, config.iota.serverAddress, req);
+            return await this.iota.sendZeroValueTx(config.iota.serverAddress, req);
         }, config.crows.measurementInterval);
     }
 }

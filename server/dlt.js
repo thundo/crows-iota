@@ -18,7 +18,7 @@ class Dlt {
         const provider = this.iota.getProvider();
 
         // Address deterministic generation
-        const dataAddress = await this.iota.generateAddress(config.seed, 0);
+        const dataAddress = await this.iota.generateAddress(0);
         console.log(dataAddress);
 
         this.sock.connect(config.zmqUri);

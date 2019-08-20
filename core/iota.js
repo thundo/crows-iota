@@ -6,8 +6,10 @@ const {isValidChecksum} = require('@iota/checksum');
 const config = require('config').iota;
 
 class Iota {
-    constructor() {
+    constructor(seed) {
         this.provider = null;
+        this.CROWS_TAG = 'CROWS';
+        this.seed = seed;
     }
 
     async initialize() {
@@ -26,21 +28,33 @@ class Iota {
         return this.provider;
     }
 
-    async sendZeroValueTx(seed, recipient, data) {
+    async sendZeroValueTx(recipient, data) {
         const transfers = [{
             value: 0,
             address: recipient,
-            tag: 'CROWS',
+            tag: this.CROWS_TAG,
             message: data ? asciiToTrytes(JSON.stringify(data)) : null,
         }];
-        const trytes = await this.provider.prepareTransfers(seed, transfers, {});
+        const trytes = await this.provider.prepareTransfers(this.seed, transfers, {});
         const bundle = await this.provider.sendTrytes(trytes, config.depth, config.minWeightMagnitude);
         console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
         return bundle[0].hash;
     }
 
-    async generateAddress(seed, index) {
-        return generateAddress(seed, index, config.security);
+    async sendValueTx(recipient, value) {
+        const transfers = [{
+            value: value,
+            address: recipient,
+            tag: this.CROWS_TAG,
+        }];
+        const trytes = await this.provider.prepareTransfers(this.seed, transfers, {});
+        const bundle = await this.provider.sendTrytes(trytes, config.depth, config.minWeightMagnitude);
+        console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
+        return bundle[0].hash;
+    }
+
+    async generateAddress(index) {
+        return generateAddress(this.seed, index, config.security);
     }
 
     static isAddressValid(address) {
@@ -48,10 +62,10 @@ class Iota {
             (/^[A-Z9]{90}$/.test(address) && isValidChecksum(address));
     }
 
-    async newAttachedAddress(seed) {
-        const newAddress = await this.provider.getNewAddress(seed, {security: config.security});
+    async newAttachedAddress() {
+        const newAddress = await this.provider.getNewAddress(this.seed, {security: config.security});
         console.log(newAddress);
-        await this.sendZeroValueTx(seed, newAddress, null);
+        await this.sendZeroValueTx(newAddress, null);
         return newAddress;
     }
 }

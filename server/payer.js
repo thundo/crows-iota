@@ -27,6 +27,7 @@ class Payer {
             console.log(k);
             if (v.unpaid_measurements > config.paymentThreshold) {
                 console.log(`Paying ${v.name} (#${k})`);
+                this.iota.sendValueTx()
                 v.unpaid_measurements = 0;
             }
         });

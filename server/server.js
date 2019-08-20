@@ -34,7 +34,7 @@ class Server {
             res.status(status).send(result);
         });
 
-        this.iota = new Iota();
+        this.iota = new Iota(config.iota.seed);
         this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
         this.payer = new Payer(this.iota, this.members, this.payments);
     }

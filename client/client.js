@@ -7,14 +7,14 @@ const Iota = require('../core/iota');
 console.log(config);
 
 module.exports = async () => {
-    const iota = new Iota();
+    const iota = new Iota(config.iota.seed);
     await iota.initialize();
     const provider = iota.getProvider();
 
     const accountData = await provider.getAccountData(config.iota.seed);
     console.log(accountData);
 
-    const newAddress = await iota.newAttachedAddress(config.iota.seed);
+    const newAddress = await iota.newAttachedAddress();
 
     const crows = new Crows(iota);
     await crows.register(newAddress);
