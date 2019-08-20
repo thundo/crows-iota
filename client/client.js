@@ -6,18 +6,31 @@ const Iota = require('../core/iota');
 const logger = require('./logger');
 const util = require('util');
 
-module.exports = async () => {
-    const iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
-    await iota.initialize();
-    const provider = iota.getProvider();
+class Client {
+    constructor () {
+        this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
+    }
 
-    const accountData = await provider.getAccountData(config.iota.seed);
-    logger.debug(util.inspect(accountData, true, null));
+    async start () {
+        await this.iota.initialize();
+        const provider = this.iota.getProvider();
 
-    const newAddress = await iota.newAttachedAddress();
+        const accountData = await provider.getAccountData(config.iota.seed);
+        logger.debug(util.inspect(accountData, true, 2));
 
-    const crows = new Crows(iota);
-    await crows.register(newAddress);
+        const newAddress = await this.iota.newAttachedAddress();
 
-    await crows.measure();
-};
+        this.crows = new Crows(this.iota);
+        await this.crows.register(newAddress);
+
+        await this.crows.runLoop();
+    }
+
+    dispose () {
+        if (this.crows !== undefined) {
+            this.crows.dispose();
+        }
+    }
+}
+
+module.exports = Client;

@@ -28,12 +28,12 @@ class Crows {
             this.stationId = response.data.station_id;
             logger.info(`Station registered with id ${this.stationId}`);
         } catch (e) {
-            logger.error(e.response.data);
+            logger.error(e.message);
             throw e;
         }
     }
 
-    async measure() {
+    async runLoop() {
         this.intervalId = setInterval(async () => {
             const req = {
                 command: constants.COMMAND_MEASUREMENT,
@@ -45,6 +45,12 @@ class Crows {
             logger.info('Publishing measurement...');
             return await this.iota.sendZeroValueTx(config.iota.serverAddress, req);
         }, config.crows.measurementInterval);
+    }
+
+    dispose () {
+        if (this.intervalId !== undefined) {
+            clearInterval(this.intervalId);
+        }
     }
 }
 
