@@ -10,6 +10,7 @@ Abuse detection is beyond the scope of this PoC. Patterns, PoW, ...
 No scalability
 No snapshot
 No persistence
+No down recovery
 
 
 ## Setup for Weather Station (w/ ds18b20)
