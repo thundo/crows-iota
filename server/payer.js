@@ -1,9 +1,8 @@
 'use strict';
 
-const PromisePool = require('es6-promise-pool');
-const paymentConcurrentLimit = 3;
 const config = require('config').crows;
 const logger = require('./logger');
+const filter = require('lodash.filter');
 
 class Payer {
     constructor(iota, members, payments) {
@@ -12,24 +11,23 @@ class Payer {
         this.payments = payments;
     }
 
-    start() {
+    async start() {
         const self = this;
-        this.intervalId = setInterval(() => {
-            const boundPromiseProducer = self._promiseProducer.bind(this);
-            const pool = new PromisePool(boundPromiseProducer, paymentConcurrentLimit);
-            const poolPromise = pool.start();
+        this.intervalId = setInterval(async () => {
+            return await Promise.all(self._paymentsProducer());
         }, config.paymentInterval);
     }
 
-    _promiseProducer() {
+    _paymentsProducer() {
         logger.info('Running payer...');
-        Object.entries(this.members).forEach(([k, v]) => {
-            if (v.unpaid_measurements > config.paymentThreshold) {
-                logger.verbose(`Paying ${v.unpaid_measurements} measurements for ${v.name} (${k})`);
-                // this.iota.sendValueTx()
-                v.unpaid_measurements = 0;
-            }
-        });
+        const toBePaid = filter(Object.values(this.members), (m) => m.unpaid_measurements > config.paymentThreshold);
+        const paymentPromises = [];
+        for (let i = 0; i < toBePaid.length; i++) {
+            const station = toBePaid[i];
+            logger.verbose(`Paying ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
+            paymentPromises.push(this.iota.sendValueTx(station.payment_address, station.unpaid_measurements));
+        }
+        return paymentPromises;
     }
 
     dispose() {
