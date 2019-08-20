@@ -2,21 +2,19 @@
 
 const {extractJson} = require('@iota/extract-json');
 const zmq = require('zeromq');
-const Iota = require('../core/iota');
 const config = require('config').iota;
 const constants = require('../core/constants');
 const omit = require('lodash.omit');
 
 class Dlt {
-    constructor(members, data) {
-        this.iota = new Iota();
+    constructor(iota, members, data) {
+        this.iota = iota;
         this.sock = zmq.socket('sub');
         this.members = members;
         this.data = data;
     }
 
     async start() {
-        await this.iota.initialize();
         const provider = this.iota.getProvider();
 
         // Address deterministic generation

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const createApi = require('./api');
+const Iota = require('../core/iota');
 const Dlt = require('./dlt');
 const Payer = require('./payer');
 
@@ -14,7 +15,7 @@ class Server {
     constructor() {
         this.members = {};
         this.data = [];
-        this.payments = [];
+        this.payments = {};
 
         this.app = express();
         this.app.set('port', config.web.port);
@@ -33,14 +34,16 @@ class Server {
             res.status(status).send(result);
         });
 
-        this.dlt = new Dlt(this.members, this.data, this.payments);
-        this.payer = new Payer(this.members, this.payments);
+        this.iota = new Iota();
+        this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
+        this.payer = new Payer(this.iota, this.members, this.payments);
     }
 
     async start() {
         this.web = this.app.listen(this.app.get('port'), () => {
             console.log('HTTP web started on port %d.', this.app.get('port'));
         });
+        await this.iota.initialize();
         this.dlt.start();
         this.payer.start();
     }

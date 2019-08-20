@@ -2,10 +2,11 @@
 
 const PromisePool = require('es6-promise-pool');
 const paymentConcurrentLimit = 3;
-const config = require('config');
+const config = require('config').crows;
 
 class Payer {
-    constructor (members, payments) {
+    constructor (iota, members, payments) {
+        this.iota = iota;
         this.members = members;
         this.payments = payments;
     }
@@ -17,14 +18,14 @@ class Payer {
             const pool = new PromisePool(boundPromiseProducer, paymentConcurrentLimit);
             const poolPromise = pool.start();
             // boundPromiseProducer();
-        }, config.crows.paymentInterval);
+        }, config.paymentInterval);
     }
 
     _promiseProducer() {
-        console.log('Running payer')
+        console.log('Running payer');
         Object.entries(this.members).forEach(([k, v]) => {
             console.log(k);
-            if (v.unpaid_measurements > config.crows.paymentThreshold) {
+            if (v.unpaid_measurements > config.paymentThreshold) {
                 console.log(`Paying ${v.name} (#${k})`);
                 v.unpaid_measurements = 0;
             }
