@@ -8,8 +8,7 @@ const createApi = require('./api');
 const Iota = require('../core/iota');
 const Dlt = require('./dlt');
 const Payer = require('./payer');
-
-console.log(config);
+const logger = require('./logger');
 
 class Server {
     constructor() {
@@ -30,18 +29,18 @@ class Server {
                 payload: err.payload,
             };
             const status = err.code || 500;
-            console.error(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
+            logger.warn(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
             res.status(status).send(result);
         });
 
-        this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options);
+        this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
         this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
         this.payer = new Payer(this.iota, this.members, this.payments);
     }
 
     async start() {
         this.web = this.app.listen(this.app.get('port'), () => {
-            console.log('HTTP web started on port %d.', this.app.get('port'));
+            logger.info(`HTTP web started on port ${this.app.get('port')}`);
         });
         await this.iota.initialize();
         this.dlt.start();

@@ -12,5 +12,8 @@
     "crows": {
         "baseUrl": "http://localhost:8080",
         "measurementInterval": 5000
+    },
+    "logger": {
+        "level": "debug"
     }
 }

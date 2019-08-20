@@ -7,6 +7,7 @@ const pick = require('lodash.pick');
 const yup = require('yup');
 const {isAddressValid} = require('../core/iota');
 const util = require('util');
+const logger = require('./logger');
 
 module.exports = (members) => {
     const router = createRouter();
@@ -39,7 +40,7 @@ module.exports = (members) => {
 
         members[id] = station;
 
-        console.log(`New station registered ${util.inspect(station, true, null)}`);
+        logger.info(`New station registered ${util.inspect(station, true, null)}`);
 
         res.status(HttpStatus.CREATED).send(station);
     });

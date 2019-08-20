@@ -5,12 +5,13 @@ const {asciiToTrytes} = require('@iota/converter');
 const {isValidChecksum} = require('@iota/checksum');
 
 class Iota {
-    constructor(seed, iriUri, options = {}) {
+    constructor(seed, iriUri, options = {}, logger) {
         this.provider = null;
         this.CROWS_TAG = 'CROWS';
         this.seed = seed;
         this.iriUri = iriUri;
         this.options = options;
+        this.logger = logger;
     }
 
     async initialize() {
@@ -21,7 +22,7 @@ class Iota {
         if (Math.abs(nodeInfo['latestMilestoneIndex'] - nodeInfo['latestSolidSubtangleMilestoneIndex']) > 3) {
             throw new Error('Node is probably not synced!');
         } else {
-            console.log('Node is probably synced!');
+            this.logger.info('Node is probably synced!');
         }
     }
 
@@ -38,7 +39,7 @@ class Iota {
         }];
         const trytes = await this.provider.prepareTransfers(this.seed, transfers, {});
         const bundle = await this.provider.sendTrytes(trytes, this.options.depth, this.options.minWeightMagnitude);
-        console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
+        this.logger.debug(`Published transaction with tail hash: ${bundle[0].hash}`);
         return bundle[0].hash;
     }
 
@@ -50,7 +51,7 @@ class Iota {
         }];
         const trytes = await this.provider.prepareTransfers(this.seed, transfers, {});
         const bundle = await this.provider.sendTrytes(trytes, this.options.depth, this.options.minWeightMagnitude);
-        console.log(`Published transaction with tail hash: ${bundle[0].hash}`);
+        this.logger.debug(`Published transaction with tail hash: ${bundle[0].hash}`);
         return bundle[0].hash;
     }
 
@@ -65,7 +66,7 @@ class Iota {
 
     async newAttachedAddress() {
         const newAddress = await this.provider.getNewAddress(this.seed, {security: this.options.security});
-        console.log(newAddress);
+        this.logger.debug(`New address ${newAddress} attached to the tangle`);
         await this.sendZeroValueTx(newAddress, null);
         return newAddress;
     }

@@ -15,5 +15,8 @@
     },
     "web": {
         "port": 8080
+    },
+    "logger": {
+        "level": "debug"
     }
 }

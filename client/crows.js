@@ -3,6 +3,7 @@
 const axios = require('axios');
 const config = require('config');
 const constants = require('../core/constants');
+const logger = require('./logger');
 
 class Crows {
     constructor(iota) {
@@ -10,6 +11,7 @@ class Crows {
         this.stationId = null;
         this.intervalId = null;
     }
+
     async register(paymentAddress) {
         const client = axios.create();
         const data = {
@@ -20,12 +22,13 @@ class Crows {
             altitude: config.altitude,
             payment_address: paymentAddress,
         };
+        logger.info(`Registering station with payment address ${paymentAddress}`);
         try {
             const response = await client.post(`${config.crows.baseUrl}/api/stations`, data);
-            console.log(response.data);
             this.stationId = response.data.station_id;
+            logger.info(`Station registered with id ${this.stationId}`);
         } catch (e) {
-            console.error(e.response.data);
+            logger.error(e.response.data);
             throw e;
         }
     }
@@ -39,7 +42,7 @@ class Crows {
                 dt: Date.now(),
                 station_id: this.stationId,
             };
-            console.log(`Publishing measurement...`)
+            logger.info('Publishing measurement...');
             return await this.iota.sendZeroValueTx(config.iota.serverAddress, req);
         }, config.crows.measurementInterval);
     }

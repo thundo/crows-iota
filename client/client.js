@@ -3,16 +3,16 @@
 const config = require('config');
 const Crows = require('./crows');
 const Iota = require('../core/iota');
-
-console.log(config);
+const logger = require('./logger');
+const util = require('util');
 
 module.exports = async () => {
-    const iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options);
+    const iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
     await iota.initialize();
     const provider = iota.getProvider();
 
     const accountData = await provider.getAccountData(config.iota.seed);
-    console.log(accountData);
+    logger.debug(util.inspect(accountData, true, null));
 
     const newAddress = await iota.newAttachedAddress();
 

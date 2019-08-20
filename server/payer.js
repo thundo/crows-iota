@@ -3,37 +3,36 @@
 const PromisePool = require('es6-promise-pool');
 const paymentConcurrentLimit = 3;
 const config = require('config').crows;
+const logger = require('./logger');
 
 class Payer {
-    constructor (iota, members, payments) {
+    constructor(iota, members, payments) {
         this.iota = iota;
         this.members = members;
         this.payments = payments;
     }
 
-    start () {
+    start() {
         const self = this;
         this.intervalId = setInterval(() => {
             const boundPromiseProducer = self._promiseProducer.bind(this);
             const pool = new PromisePool(boundPromiseProducer, paymentConcurrentLimit);
             const poolPromise = pool.start();
-            // boundPromiseProducer();
         }, config.paymentInterval);
     }
 
     _promiseProducer() {
-        console.log('Running payer...');
+        logger.info('Running payer...');
         Object.entries(this.members).forEach(([k, v]) => {
-            console.log(k);
             if (v.unpaid_measurements > config.paymentThreshold) {
-                console.log(`Paying ${v.unpaid_measurements} measurements for ${v.name} (#${k})`);
+                logger.verbose(`Paying ${v.unpaid_measurements} measurements for ${v.name} (${k})`);
                 // this.iota.sendValueTx()
                 v.unpaid_measurements = 0;
             }
         });
     }
 
-    dispose () {
+    dispose() {
         if (this.intervalId !== undefined) {
             clearImmediate(this.intervalId);
         }
