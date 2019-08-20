@@ -43,6 +43,7 @@ class Dlt {
                 case constants.COMMAND_MEASUREMENT:
                     this.data.push(omit(message, ['command']));
                     this.members[message.station_id].unpaid_measurements++;
+                    console.log(`Station ${this.members[message.station_id].name} (#${message.station_id}) posted a measurement`);
                     break;
             }
         });

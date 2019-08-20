@@ -39,6 +39,7 @@ class Crows {
                 dt: Date.now(),
                 station_id: this.stationId,
             };
+            console.log(`Publishing measurement...`)
             return await this.iota.sendZeroValueTx(config.iota.serverAddress, req);
         }, config.crows.measurementInterval);
     }

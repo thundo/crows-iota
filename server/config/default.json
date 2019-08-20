@@ -10,8 +10,8 @@
         }
     },
     "crows": {
-        "paymentInterval": 10000,
-        "paymentThrehsold": 10
+        "paymentInterval": 20000,
+        "paymentThreshold": 10
     },
     "web": {
         "port": 8080

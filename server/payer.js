@@ -22,12 +22,12 @@ class Payer {
     }
 
     _promiseProducer() {
-        console.log('Running payer');
+        console.log('Running payer...');
         Object.entries(this.members).forEach(([k, v]) => {
             console.log(k);
             if (v.unpaid_measurements > config.paymentThreshold) {
-                console.log(`Paying ${v.name} (#${k})`);
-                this.iota.sendValueTx()
+                console.log(`Paying ${v.unpaid_measurements} measurements for ${v.name} (#${k})`);
+                // this.iota.sendValueTx()
                 v.unpaid_measurements = 0;
             }
         });

@@ -6,11 +6,11 @@
         "options": {
             "depth": 3,
             "minWeightMagnitude": 9,
-            "security": 2,
+            "security": 2
         }
     },
     "crows": {
         "baseUrl": "http://localhost:8080",
-        "measurementInterval": 2000
+        "measurementInterval": 5000
     }
 }
