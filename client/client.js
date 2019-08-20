@@ -7,7 +7,7 @@ const Iota = require('../core/iota');
 console.log(config);
 
 module.exports = async () => {
-    const iota = new Iota(config.iota.seed);
+    const iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options);
     await iota.initialize();
     const provider = iota.getProvider();
 

@@ -1,11 +1,13 @@
 {
     "iota": {
         "seed": "BEUMDYCNBYTDAETCRTJXOMSWSIAZMI9JKMKB99LNGCJLVIQWQOS9PRYVFTTBUVVFMSSURWICFTCULNIGQ",
-        "depth": 3,
-        "minWeightMagnitude": 9,
-        "security": 2,
         "iriUri": "https://nodes.devnet.iota.org:443",
-        "zmqUri": "tcp://zmq.devnet.iota.org:5556"
+        "zmqUri": "tcp://zmq.devnet.iota.org:5556",
+        "options": {
+            "depth": 3,
+            "minWeightMagnitude": 9,
+            "security": 2
+        }
     },
     "crows": {
         "paymentInterval": 10000,
