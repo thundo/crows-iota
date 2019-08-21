@@ -1,0 +1,6 @@
+note over Server:listen to IOTA ZeroMQ\nfor data address
+
+Client-->(1)Server: Post Measurement\n(IOTA 0-value tx)
+
+note over Server: Store measurement
+note over Server: Increment station\n**unpaid_measurements**

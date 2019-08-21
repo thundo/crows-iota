@@ -1,0 +1,6 @@
+loop registered stations
+note over Server: check if station is above threshold
+Server-->(1)Client: Payment\n(IOTA value tx)
+end
+
+

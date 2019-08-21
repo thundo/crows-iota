@@ -1,0 +1,2 @@
+Client->Server:**POST /stations**\n(name, payment_address, lat, lon, alt, ...)
+Server-->Client:station_id
