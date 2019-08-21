@@ -32,7 +32,7 @@ class Payer {
 
     dispose() {
         if (this.intervalId !== undefined) {
-            clearImmediate(this.intervalId);
+            clearInterval(this.intervalId);
         }
     }
 }
