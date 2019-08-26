@@ -38,7 +38,7 @@ class Payer extends EventEmitter {
             };
             this.payments.push(payment);
             this.emit(PAYER_PAYMENT, payment);
-            station.unpaid_measurements = 0;
+            this.members[station.station_id].unpaid_measurements = 0;
         }
         return paymentPromises;
     }
