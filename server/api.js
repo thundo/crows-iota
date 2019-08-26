@@ -8,8 +8,9 @@ const yup = require('yup');
 const {isAddressValid} = require('../core/iota');
 const util = require('util');
 const logger = require('./logger');
+const {API_STATION_REGISTERED} = require('../core/constants');
 
-module.exports = (members) => {
+module.exports = (app, members) => {
     const router = createRouter();
 
     router.post('/stations', async (req, res) => {
@@ -33,14 +34,16 @@ module.exports = (members) => {
         const id = nanoid();
         const station = Object.assign({
             station_id: id,
-            updated_at: new Date(),
-            created_at: new Date(),
+            updated_at: Date.now(),
+            created_at: Date.now(),
             unpaid_measurements: 0,
         }, pick(req.body, ['external_id', 'name', 'latitude', 'longitude', 'altitude', 'payment_address']));
 
         members[id] = station;
 
         logger.info(`New station registered ${util.inspect(station, true, null)}`);
+
+        app.emit(API_STATION_REGISTERED, station);
 
         res.status(HttpStatus.CREATED).send(station);
     });

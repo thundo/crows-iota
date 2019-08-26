@@ -3,13 +3,15 @@
 const {extractJson} = require('@iota/extract-json');
 const zmq = require('zeromq');
 const config = require('config').iota;
-const constants = require('../core/constants');
+const {COMMAND_MEASUREMENT, DLT_MEASUREMENT} = require('../core/constants');
 const omit = require('lodash.omit');
 const logger = require('./logger');
 const util = require('util');
+const EventEmitter = require('events');
 
-class Dlt {
+class Dlt extends EventEmitter {
     constructor(iota, members, data) {
+        super();
         this.iota = iota;
         this.sock = zmq.socket('sub');
         this.members = members;
@@ -41,8 +43,13 @@ class Dlt {
                 return;
             }
             switch (message.command) {
-                case constants.COMMAND_MEASUREMENT:
-                    this.data.push(omit(message, ['command']));
+                case COMMAND_MEASUREMENT:
+                    const measurement = omit(message, ['command']);
+                    measurement.created_at = Date.now();
+                    measurement.station_name = this.members[message.station_id].name;
+                    measurement.unpaid_measurements = this.members[message.station_id].unpaid_measurements;
+                    this.data.push(measurement);
+                    this.emit(DLT_MEASUREMENT, measurement);
                     this.members[message.station_id].unpaid_measurements++;
                     logger.verbose(`Station ${this.members[message.station_id].name} (${message.station_id}) posted a measurement`);
                     break;

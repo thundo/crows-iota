@@ -9,6 +9,9 @@ const Iota = require('../core/iota');
 const Dlt = require('./dlt');
 const Payer = require('./payer');
 const logger = require('./logger');
+const expressWs = require('express-ws');
+const handleWs = require('./ws');
+const createFrontend = require('./frontend');
 
 class Server {
     constructor() {
@@ -16,14 +19,25 @@ class Server {
         this.data = [];
         this.payments = {};
 
+        this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
+        this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
+        this.payer = new Payer(this.iota, this.members, this.payments);
+
         this.app = express();
+        this.app.set("view options", {layout: false});
+        this.app.use(express.static(__dirname + '/public'));
+        expressWs(this.app, undefined, {leaveRouterUntouched: true});
         this.app.set('port', config.web.port);
         this.app.use(bodyParser.json());
         this.app.use(cors({
             origin: '*',
         }));
-        this.app.use('/api', createApi(this.members));
-        this.app.use((err, req, res, next) => {
+        this.app.use('/', createFrontend());
+        this.app.use('/api', createApi(this.app, this.members));
+        this.app.ws('/ws', (ws, req) => {
+            handleWs(ws, req, this.app, this.dlt, this.payer);
+        });
+        this.app.use((err, req, res) => {
             const result = {
                 message: err.message,
                 payload: err.payload,
@@ -33,9 +47,6 @@ class Server {
             res.status(status).send(result);
         });
 
-        this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
-        this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
-        this.payer = new Payer(this.iota, this.members, this.payments);
     }
 
     async start() {

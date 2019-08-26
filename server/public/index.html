@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CROWS Status</title>
+    <style>
+        p {margin: 2px}
+        .registration {color: #ff2239}
+        .measurement {color: #ff9f40}
+        .payment {color: #aaff12}
+    </style>
+</head>
+<body>
+    <div id="content" style="width: 80%; margin: 40px auto; background: #ddd; border-radius:5px; min-height: 200px; padding: 10px;">
+        Connecting...
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            const connection = new WebSocket('ws://127.0.0.1:8080/ws');
+
+            connection.onopen = () => {
+                $("#content").html("<h1>CROWS status online</h1>");
+            };
+
+            connection.onerror = (error) => {
+                console.error(error);
+            };
+
+            connection.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                console.log(message)
+                switch(message.source) {
+                    case 'api':
+                        $("#content").append(`<p class="registration">[${new Date(message.payload.created_at).toISOString()} api] New station <i>${message.payload.name} (${message.payload.station_id})</i> registered</p>`);
+                        break;
+                    case 'dlt':
+                        $("#content").append(`<p class="measurement">[${new Date(message.payload.dt).toISOString()} dlt} Measurement received by <i>${message.payload.station_name} (${message.payload.station_id}])</i>, ${message.payload.unpaid_measurements} unpaid</p>`);
+                        break;
+                    case 'payer':
+                        // $("#content").append(`<p>[${new Date(message.payload.timestamp).toISOString()} payer]: Payer is running</p>`);
+                        if (message.payload.amount) {
+                            // $("#content").append(`<p class="payment">[${new Date(message.payload.created_at).toISOString()} payer]: Paying <b>${message.payload.amount}</b>i to <i>${message.payload.name} (${message.payload.station_id})</i></p>`);
+                            $("#content").append(`<p class="payment">asd</p>`);
+                        }
+                        break;
+                }
+            };
+        });
+    </script>
+</body>
+</html>
