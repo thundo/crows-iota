@@ -26,6 +26,14 @@ class Payer {
             const station = toBePaid[i];
             logger.verbose(`Paying ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
             paymentPromises.push(this.iota.sendValueTx(station.payment_address, station.unpaid_measurements));
+            this.payments.push({
+                name: station.name,
+                id: station.station_id,
+                address: station.payment_address,
+                amount: station.unpaid_measurements,
+                createdAt: Date.now(),
+            });
+            station.unpaid_measurements = 0;
         }
         return paymentPromises;
     }
