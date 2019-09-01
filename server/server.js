@@ -17,7 +17,7 @@ class Server {
     constructor() {
         this.members = {};
         this.data = [];
-        this.payments = {};
+        this.payments = [];
 
         this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
         this.dlt = new Dlt(this.iota, this.members, this.data, this.payments);
