@@ -45,12 +45,11 @@ class Dlt extends EventEmitter {
             switch (message.command) {
                 case COMMAND_MEASUREMENT:
                     const measurement = omit(message, ['command']);
-                    measurement.created_at = Date.now();
-                    measurement.station_name = this.members[message.station_id].name;
+                    measurement.name = this.members[message.station_id].name;
+                    this.members[message.station_id].unpaid_measurements++;
                     measurement.unpaid_measurements = this.members[message.station_id].unpaid_measurements;
                     this.data.push(measurement);
                     this.emit(DLT_MEASUREMENT, measurement);
-                    this.members[message.station_id].unpaid_measurements++;
                     logger.verbose(`Station ${this.members[message.station_id].name} (${message.station_id}) posted a measurement`);
                     break;
             }

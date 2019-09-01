@@ -2,51 +2,214 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>CROWS Status</title>
-    <style>
-        p {margin: 2px}
-        .registration {color: #ff2239}
-        .measurement {color: #ff9f40}
-        .payment {color: #aaff12}
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CROWS</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Google Font -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body>
-    <div id="content" style="width: 80%; margin: 40px auto; background: #ddd; border-radius:5px; min-height: 200px; padding: 10px;">
-        Connecting...
+<body class="hold-transition skin-black sidebar-mini">
+<div class="wrapper">
+
+    <header class="main-header">
+        <a href="" class="logo">
+            <span class="logo-mini">C</span>
+            <span class="logo-lg"><b>CROWS</b></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <div class="user-panel">
+                <div class="pull-left image" style="height: 80px">
+                </div>
+                <div class="pull-left info">
+                    <a href="#"><i class="fa fa-circle" id="iota-zmq"></i> IOTA ZMQ Listener</a>
+                </div>
+            </div>
+        </section>
+    </aside>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Stations
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            </ol>
+        </section>
+
+        <section class="content" id="content">
+        </section>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script>
-        $(function () {
-            const connection = new WebSocket('ws://127.0.0.1:8080/ws');
 
-            connection.onopen = () => {
-                $("#content").html("<h1>CROWS status online</h1>");
-            };
+    <footer class="main-footer">
+        CROWS is a <strong><a href="https://twitter.com">@thundo</a></strong>'s creation
+    </footer>
 
-            connection.onerror = (error) => {
-                console.error(error);
-            };
+</div>
+<!-- ./wrapper -->
 
-            connection.onmessage = (event) => {
-                const message = JSON.parse(event.data);
-                console.log(message)
-                switch(message.source) {
-                    case 'api':
-                        $("#content").append(`<p class="registration">[${new Date(message.payload.created_at).toISOString()} api] New station <i>${message.payload.name} (${message.payload.station_id})</i> registered</p>`);
-                        break;
-                    case 'dlt':
-                        $("#content").append(`<p class="measurement">[${new Date(message.payload.dt).toISOString()} dlt} Measurement received by <i>${message.payload.station_name} (${message.payload.station_id}])</i>, ${message.payload.unpaid_measurements} unpaid</p>`);
-                        break;
-                    case 'payer':
-                        // $("#content").append(`<p>[${new Date(message.payload.timestamp).toISOString()} payer]: Payer is running</p>`);
-                        if (message.payload.amount) {
-                            // $("#content").append(`<p class="payment">[${new Date(message.payload.created_at).toISOString()} payer]: Paying <b>${message.payload.amount}</b>i to <i>${message.payload.name} (${message.payload.station_id})</i></p>`);
-                            $("#content").append(`<p class="payment">asd</p>`);
-                        }
-                        break;
+<!-- jQuery 3 -->
+<script src="jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="js/demo.js"></script>
+<!-- FLOT CHARTS -->
+<script src="Flot/jquery.flot.js"></script>
+<script src="Flot/jquery.flot.resize.js"></script>
+<script src="Flot/jquery.flot.time.js"></script>
+<!-- Page script -->
+<script>
+    $(function() {
+        const connection = new WebSocket('ws://127.0.0.1:8080/ws');
+
+        connection.onopen = () => {
+            $('#iota-zmq').addClass('text-success');
+        };
+
+        connection.onerror = (error) => {
+            $('#iota-zmq').removeClass('text-error');
+            $('#iota-zmq').addClass('text-error');
+            console.error(error);
+        };
+
+        connection.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            console.log(message);
+            switch (message.source) {
+                case 'api':
+                    setupStationChart(message);
+                    break;
+                case 'dlt':
+                    addMeasurement(message);
+                    break;
+                case 'payer':
+                    if (message.payload.amount) {
+                        // $('#content').append(`<p class="payment">asd</p>`);
+                    }
+                    break;
+            }
+        };
+
+        function setupStationChart (message) {
+            const newStationChart = `<div class="row">
+                <div class="col-xs-12">
+                  <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <i class="fa fa-bar-chart-o"></i>
+
+                      <h3 class="box-title">${message.payload.name} (${message.payload.station_id})</h3>
+                    </div>
+                    <div class="box-body">
+                      <div id="chart-${message.payload.station_id}" style="height: 300px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+            $(newStationChart).appendTo('#content');
+
+            $.plot(`#chart-${message.payload.station_id}`, [
+                {label: 'Temperature', data: [], lines: {show: true}, points: {show: true}},
+                {label: 'Humidity', data: [], lines: {show: true}, points: {show: true}},
+            ], {
+                grid: {
+                    hoverable  : true,
+                    borderColor: '#f3f3f3',
+                    borderWidth: 1,
+                    tickColor: '#f3f3f3',
+                },
+                series: {
+                },
+                lines: {
+                    fill: false,
+                    color: '#3c8dbc',
+                },
+
+                yaxis: {
+                    show: true,
+                },
+                xaxis: {
+                    show: true,
+                    mode: 'time',
+                    // timeformat: "%Y/%m/%d %H:%M:%S",
+                },
+            });
+
+            $(`#chart-${message.payload.station_id}`).bind('plothover', (event, pos, item) => {
+                if (item) {
+                    const x = new Date(item.datapoint[0]).toISOString();
+                    const y = item.datapoint[1].toFixed(2);
+
+                    $('#line-chart-tooltip').html(`[${item.series.label}] ${y} at ${x}`)
+                        .css({top: item.pageY + 5, left: item.pageX + 5})
+                        .fadeIn(200);
+                } else {
+                    $('#line-chart-tooltip').hide();
                 }
-            };
-        });
-    </script>
+            });
+        }
+
+        function addMeasurement (message) {
+            const stationPlot = $(`#chart-${message.payload.station_id}`).data('plot');
+            if (!stationPlot) {
+                setupStationChart(message);
+            }
+            const maxPoints = 30;
+            const allData = stationPlot.getData();
+            function updateSeries(index, variable) {
+                let tempData = allData[index].data;
+                if (tempData.length > maxPoints) {
+                    tempData = tempData.shift();
+                }
+                tempData.push([new Date(message.payload.dt), message.payload[variable]]);
+            }
+            updateSeries(0, 'temperature');
+            updateSeries(1, 'humidity');
+            stationPlot.setData(allData);
+            stationPlot.setupGrid();
+            stationPlot.draw();
+        }
+
+        $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
+            position: 'absolute',
+            display: 'none',
+            opacity: 0.6,
+        }).appendTo('body');
+    });
+</script>
 </body>
 </html>

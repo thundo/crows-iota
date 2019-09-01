@@ -37,15 +37,15 @@ class Server {
         this.app.ws('/ws', (ws, req) => {
             handleWs(ws, req, this.app, this.dlt, this.payer);
         });
-        this.app.use((err, req, res) => {
-            const result = {
-                message: err.message,
-                payload: err.payload,
-            };
-            const status = err.code || 500;
-            logger.warn(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
-            res.status(status).send(result);
-        });
+        // this.app.use((err, req, res) => {
+        //     const result = {
+        //         message: err.message,
+        //         payload: err.payload,
+        //     };
+        //     const status = err.code || 500;
+        //     logger.warn(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
+        //     res.status(status).send(result);
+        // });
 
     }
 
