@@ -38,7 +38,7 @@ class Crows {
         this.intervalId = setInterval(async () => {
             let readout;
             try {
-                readout = await sensor.read(config.sensor.type, config.sensor.pin);
+                readout = await sensor.read(config.crows.sensor.type, config.crows.sensor.pin);
             } catch (e) {
                 logger.error(`Failed to read sensor data: ${e.message}`);
                 return;
