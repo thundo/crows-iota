@@ -4,6 +4,7 @@ const axios = require('axios');
 const config = require('config');
 const constants = require('../core/constants');
 const logger = require('./logger');
+const sensor = require("node-dht-sensor").promises;
 
 class Crows {
     constructor(iota) {
@@ -35,10 +36,18 @@ class Crows {
 
     async runLoop() {
         this.intervalId = setInterval(async () => {
+            let readout;
+            try {
+                readout = await sensor.read(config.sensor.type, config.sensor.pin);
+            } catch (e) {
+                logger.error(`Failed to read sensor data: ${e.message}`);
+                return;
+            }
+
             const req = {
                 command: constants.COMMAND_MEASUREMENT,
-                temperature: 28.5,
-                humidity: 63.3,
+                temperature: readout.temperature,
+                humidity: readout.humidity,
                 dt: Date.now(),
                 station_id: this.stationId,
             };

@@ -11,7 +11,11 @@
     },
     "crows": {
         "baseUrl": "http://localhost:8080",
-        "measurementInterval": 10000
+        "measurementInterval": 10000,
+        "sensor": {
+            "pin": 4,
+            "type": 22
+        }
     },
     "logger": {
         "level": "debug"
