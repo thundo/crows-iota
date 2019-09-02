@@ -31,7 +31,7 @@ class Payer extends EventEmitter {
             paymentPromises.push(this.iota.sendValueTx(station.payment_address, station.unpaid_measurements));
             const payment = {
                 name: station.name,
-                id: station.station_id,
+                station_id: station.station_id,
                 address: station.payment_address,
                 amount: station.unpaid_measurements,
                 created_at: Date.now(),

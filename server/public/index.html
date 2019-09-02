@@ -118,9 +118,7 @@
                     addMeasurement(message);
                     break;
                 case 'payer':
-                    if (message.payload.amount) {
-                        // $('#content').append(`<p class="payment">asd</p>`);
-                    }
+                    addPayment(message);
                     break;
             }
         };
@@ -146,7 +144,7 @@
 
                       <h3 class="box-title">${message.payload.name} (${message.payload.station_id}) Log</h3>
                     </div>
-                    <div class="box-body table-responsive">
+                    <div class="box-body">
                       <table id="log-${message.payload.station_id}" class="table table-hover table-striped">
                         <tr>
                           <th>Date</th>
@@ -225,19 +223,22 @@
             stationPlot.draw();
         }
 
+        function addPayment (message) {
+            if (message.payload.amount) {
+                const log = $(`#log-${message.payload.station_id}`);
+                const logMessage = `<tr>
+                  <td>${new Date(message.payload.created_at).toISOString()}</td>
+                  <td>Payment of ${message.payload.amount}i issued for ${message.payload.address}</td>
+                </tr>`;
+                $(logMessage).appendTo(log);
+            }
+        }
+
         $('<div class="tooltip-inner" id="line-chart-tooltip"></div>').css({
             position: 'absolute',
             display: 'none',
             opacity: 0.6,
         }).appendTo('body');
-
-        setupStationChart({
-            payload: {
-                name: 'Test station',
-                station_id: 'asd',
-                created_at: Date.now()
-            }
-        })
     });
 </script>
 </body>
