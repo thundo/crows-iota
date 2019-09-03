@@ -42,11 +42,14 @@
 
     <aside class="main-sidebar">
         <section class="sidebar">
-            <div class="user-panel">
-                <ul style="color: white; list-style: none">
-                    <li><a href="#"><i class="fa fa-circle" id="iota-zmq"></i> IOTA ZMQ Listener</a></li>
-                    <li><a href="#"><span id="server-address"></span></a></li>
-                </ul>
+            <div style="color: white; width: 60%; margin: auto;">
+                <div style="margin: 5px; text-align: center;">
+                    <div>Server address</div>
+                    <a href="" id="server-address-url" target="_blank"><div id="server-address"></div></a>
+                </div>
+                <div style="margin: 5px; text-align: center;">
+                    <i class="fa fa-circle" id="iota-zmq"></i> IOTA ZMQ Listener
+                </div>
             </div>
         </section>
     </aside>
@@ -80,6 +83,8 @@
 <script src="Flot/jquery.flot.resize.js"></script>
 <script src="Flot/jquery.flot.time.js"></script>
 
+<script src="qrcode/qrcode.min.js"></script>
+
 <script>
     $(function() {
         const connection = new WebSocket('ws://127.0.0.1:8080/ws');
@@ -107,7 +112,14 @@
                     addPayment(message);
                     break;
                 case 'server':
-                    $('#server-address').html(message.payload.address);
+                    new QRCode(document.getElementById("server-address"), {
+                        text: message.payload.address,
+                        width: 128,
+                        height: 128,
+                        colorDark: "#fff",
+                        colorLight: "#000",
+                    });
+                    $('#server-address-url').attr('href', `https://devnet.thetangle.org/address/${message.payload.address}`);
                     break;
             }
         };
