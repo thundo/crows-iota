@@ -1,12 +1,11 @@
 'use strict';
 
 const logger = require('./logger');
-const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED, DLT_MEASUREMENT, API_STATION_REGISTERED, SERVER_ADDRESS} = require('../core/constants');
+const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED, DLT_MEASUREMENT, API_STATION_REGISTERED} = require('../core/constants');
 
 module.exports = async (ws, req, app, dlt, payer, iota) => {
     let isAlive = true;
     ws.on('pong', () => {
-
         logger.silly(`Websocket PONG received from ${req.connection.remoteAddress}`);
         isAlive = true;
     });

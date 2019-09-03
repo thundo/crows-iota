@@ -7,5 +7,4 @@ module.exports = {
     PAYER_PAYMENT_FAILED: 'payer:payment_failed',
     DLT_MEASUREMENT: 'dlt:measurement',
     API_STATION_REGISTERED: 'api:station_registered',
-    SERVER_ADDRESS: 'server:address',
 };

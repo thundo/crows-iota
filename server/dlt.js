@@ -42,9 +42,10 @@ class Dlt extends EventEmitter {
                 logger.warn('Invalid station id');
                 return;
             }
+            let measurement;
             switch (message.command) {
                 case COMMAND_MEASUREMENT:
-                    const measurement = omit(message, ['command']);
+                    measurement = omit(message, ['command']);
                     measurement.name = this.members[message.station_id].name;
                     this.members[message.station_id].unpaid_measurements++;
                     measurement.unpaid_measurements = this.members[message.station_id].unpaid_measurements;

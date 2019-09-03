@@ -1,7 +1,6 @@
 'use strict';
 
 const createRouter = require('express-promise-router');
-const logger = require('./logger');
 
 module.exports = () => {
     const router = createRouter();

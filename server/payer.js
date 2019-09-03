@@ -27,6 +27,7 @@ class Payer extends EventEmitter {
         const paymentPromises = [];
         for (let i = 0; i < toBePaid.length; i++) {
             const station = toBePaid[i];
+            // eslint-disable-next-line no-async-promise-executor
             const paymentPromise = new Promise(async (resolve, reject) => {
                 try {
                     await this.iota.sendValueTx(station.payment_address, station.unpaid_measurements);

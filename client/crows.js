@@ -4,7 +4,7 @@ const axios = require('axios');
 const config = require('config');
 const constants = require('../core/constants');
 const logger = require('./logger');
-const sensor = require("node-dht-sensor").promises;
+const sensor = require('node-dht-sensor').promises;
 
 class Crows {
     constructor(iota) {
@@ -56,7 +56,7 @@ class Crows {
         }, config.crows.measurementInterval);
     }
 
-    dispose () {
+    dispose() {
         if (this.intervalId !== undefined) {
             clearInterval(this.intervalId);
         }

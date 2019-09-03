@@ -7,11 +7,11 @@ const logger = require('./logger');
 const util = require('util');
 
 class Client {
-    constructor () {
+    constructor() {
         this.iota = new Iota(config.iota.seed, config.iota.iriUri, config.iota.options, logger);
     }
 
-    async start () {
+    async start() {
         await this.iota.initialize();
         const provider = this.iota.getProvider();
 
@@ -26,7 +26,7 @@ class Client {
         await this.crows.runLoop();
     }
 
-    dispose () {
+    dispose() {
         if (this.crows !== undefined) {
             this.crows.dispose();
         }

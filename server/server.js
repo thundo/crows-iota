@@ -24,7 +24,7 @@ class Server {
         this.payer = new Payer(this.iota, this.members, this.payments);
 
         this.app = express();
-        this.app.set("view options", {layout: false});
+        this.app.set('view options', {layout: false});
         this.app.use(express.static(__dirname + '/public'));
         expressWs(this.app, undefined, {leaveRouterUntouched: true});
         this.app.set('port', config.web.port);
@@ -46,7 +46,6 @@ class Server {
         //     logger.warn(`ErrorMiddleware caught an error code=${err.code}: ${err} `);
         //     res.status(status).send(result);
         // });
-
     }
 
     async start() {
