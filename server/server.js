@@ -35,7 +35,7 @@ class Server {
         this.app.use('/', createFrontend());
         this.app.use('/api', createApi(this.app, this.members));
         this.app.ws('/ws', (ws, req) => {
-            handleWs(ws, req, this.app, this.dlt, this.payer);
+            handleWs(ws, req, this.app, this.dlt, this.payer, this.iota);
         });
         // this.app.use((err, req, res) => {
         //     const result = {

@@ -1,9 +1,9 @@
 'use strict';
 
 const logger = require('./logger');
-const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED, DLT_MEASUREMENT, API_STATION_REGISTERED} = require('../core/constants');
+const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED, DLT_MEASUREMENT, API_STATION_REGISTERED, SERVER_ADDRESS} = require('../core/constants');
 
-module.exports = (ws, req, app, dlt, payer) => {
+module.exports = async (ws, req, app, dlt, payer, iota) => {
     let isAlive = true;
     ws.on('pong', () => {
 
@@ -30,6 +30,7 @@ module.exports = (ws, req, app, dlt, payer) => {
     });
 
     logger.verbose(`WebSocket connected from ${req.connection.remoteAddress}`);
+    ws.send(JSON.stringify({source: 'server', payload: {address: await iota.generateAddress(0)}}));
 
     function payerRunningHandler(data) {
         ws.send(JSON.stringify({source: 'payer', payload: {created_at: Date.now()}}));
