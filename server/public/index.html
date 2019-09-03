@@ -193,8 +193,10 @@
         }
 
         function addMeasurement (message) {
-            console.log(message);
             const stationPlot = $(`#chart-${message.payload.station_id}`).data('plot');
+            if (!stationPlot) {
+                return;
+            }
             const maxPoints = 30;
             const allData = stationPlot.getData();
             function updateSeries(index, variable) {
