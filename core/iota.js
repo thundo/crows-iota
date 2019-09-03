@@ -49,7 +49,7 @@ class Iota {
             address: recipient,
             tag: this.CROWS_TAG,
         }];
-        const trytes = await this.provider.prepareTransfers(this.seed, transfers, {});
+        const trytes = await this.provider.prepareTransfers(this.seed, transfers);
         const bundle = await this.provider.sendTrytes(trytes, this.options.depth, this.options.minWeightMagnitude);
         this.logger.debug(`Published transaction with tail hash: ${bundle[0].hash}`);
         return bundle[0].hash;

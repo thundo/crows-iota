@@ -1,7 +1,7 @@
 'use strict';
 
 const logger = require('./logger');
-const {PAYER_RUNNING, PAYER_PAYMENT, DLT_MEASUREMENT, API_STATION_REGISTERED} = require('../core/constants');
+const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED, DLT_MEASUREMENT, API_STATION_REGISTERED} = require('../core/constants');
 
 module.exports = (ws, req, app, dlt, payer) => {
     let isAlive = true;
@@ -23,7 +23,8 @@ module.exports = (ws, req, app, dlt, payer) => {
         logger.silly(`WebSocket from ${req.connection.remoteAddress} closed`);
         clearInterval(interval);
         payer.off(PAYER_RUNNING, payerRunningHandler);
-        payer.off(PAYER_PAYMENT, payerPaymentHandler);
+        payer.off(PAYER_PAYMENT_SUCCESS, payerPaymentHandler);
+        payer.off(PAYER_PAYMENT_FAILED, payerPaymentHandler);
         dlt.off(DLT_MEASUREMENT, dltMeasurementHandler);
         app.off(API_STATION_REGISTERED, apiStationRegisteredHandler);
     });
@@ -47,7 +48,8 @@ module.exports = (ws, req, app, dlt, payer) => {
     }
 
     payer.on(PAYER_RUNNING, payerRunningHandler);
-    payer.on(PAYER_PAYMENT, payerPaymentHandler);
+    payer.on(PAYER_PAYMENT_SUCCESS, payerPaymentHandler);
+    payer.on(PAYER_PAYMENT_FAILED, payerPaymentHandler);
     dlt.on(DLT_MEASUREMENT, dltMeasurementHandler);
     app.on(API_STATION_REGISTERED, apiStationRegisteredHandler);
 };

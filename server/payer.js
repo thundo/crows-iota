@@ -1,7 +1,7 @@
 'use strict';
 
 const config = require('config').crows;
-const {PAYER_RUNNING, PAYER_PAYMENT} = require('../core/constants');
+const {PAYER_RUNNING, PAYER_PAYMENT_SUCCESS, PAYER_PAYMENT_FAILED} = require('../core/constants');
 const logger = require('./logger');
 const filter = require('lodash.filter');
 const EventEmitter = require('events');
@@ -27,18 +27,28 @@ class Payer extends EventEmitter {
         const paymentPromises = [];
         for (let i = 0; i < toBePaid.length; i++) {
             const station = toBePaid[i];
-            logger.verbose(`Paying ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
-            paymentPromises.push(this.iota.sendValueTx(station.payment_address, station.unpaid_measurements));
-            const payment = {
-                name: station.name,
-                station_id: station.station_id,
-                address: station.payment_address,
-                amount: station.unpaid_measurements,
-                created_at: Date.now(),
-            };
-            this.payments.push(payment);
-            this.emit(PAYER_PAYMENT, payment);
-            this.members[station.station_id].unpaid_measurements = 0;
+            const paymentPromise = new Promise(async (resolve, reject) => {
+                try {
+                    await this.iota.sendValueTx(station.payment_address, station.unpaid_measurements);
+                } catch (e) {
+                    logger.warn(`Unable to pay ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
+                    this.emit(PAYER_PAYMENT_FAILED, e.message);
+                    return reject(e);
+                }
+                const payment = {
+                    name: station.name,
+                    station_id: station.station_id,
+                    address: station.payment_address,
+                    amount: station.unpaid_measurements,
+                    created_at: Date.now(),
+                };
+                this.payments.push(payment);
+                this.emit(PAYER_PAYMENT_SUCCESS, payment);
+                this.members[station.station_id].unpaid_measurements = 0;
+                logger.verbose(`Paid ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
+                return resolve();
+            });
+            paymentPromises.push(paymentPromise);
         }
         return paymentPromises;
     }
