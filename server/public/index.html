@@ -164,9 +164,10 @@
                     fill: false,
                     color: '#3c8dbc',
                 },
-
                 yaxis: {
                     show: true,
+                    min: -10,
+                    max: 80,
                 },
                 xaxis: {
                     show: true,
@@ -190,6 +191,7 @@
         }
 
         function addMeasurement (message) {
+            console.log(message);
             const stationPlot = $(`#chart-${message.payload.station_id}`).data('plot');
             const maxPoints = 30;
             const allData = stationPlot.getData();
@@ -198,7 +200,11 @@
                 if (tempData.length > maxPoints) {
                     tempData = tempData.shift();
                 }
-                tempData.push([new Date(message.payload.dt), message.payload[variable]]);
+                const newPoint = [new Date(message.payload.dt), message.payload[variable]];
+                tempData.push(newPoint);
+                tempData.sort((a, b) => {
+                    return a[0].getTime() - b[0].getTime();
+                });
             }
             updateSeries(0, 'temperature');
             updateSeries(1, 'humidity');
