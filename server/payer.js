@@ -21,7 +21,7 @@ class Payer extends EventEmitter {
     }
 
     _paymentsProducer() {
-        logger.info('Running payer...');
+        logger.verbose('Running payer...');
         this.emit(PAYER_RUNNING);
         const toBePaid = filter(Object.values(this.members), (m) => m.unpaid_measurements > config.paymentThreshold);
         const paymentPromises = [];
@@ -45,7 +45,7 @@ class Payer extends EventEmitter {
                 this.payments.push(payment);
                 this.emit(PAYER_PAYMENT_SUCCESS, payment);
                 this.members[station.station_id].unpaid_measurements = 0;
-                logger.verbose(`Paid ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
+                logger.info(`Paid ${station.unpaid_measurements} measurements to ${station.name} (${station.station_id})`);
                 return resolve();
             });
             paymentPromises.push(paymentPromise);
