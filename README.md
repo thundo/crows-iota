@@ -1,5 +1,10 @@
 # CROWS
+
+![](https://i.ibb.co/7KKgd16/cover.png)
+
 CROWS is a Proof-of-Concept for a CRowdsourced Open Weather System. It is a submitted project for [Hackster.IO's Machine Money: Empowering Devices with Wallets](https://www.hackster.io/contests/machine-money-with-iota) competition.
+
+
 
 How does it run?
 
