@@ -14,14 +14,14 @@ How does it run?
     ```
 2. Generate a IOTA seed for your wallet. If you don't know how to do that, follow [these instructions](https://iota.guide/seed/how-to-generate-iota-wallet-seed/)
 3. Create your `config/local.json` file which overrides the default configuration. It should be something like
-       ```json
-       {
-          "iota": {
-              "seed": "P9LSRMEPXTBRFQTDVVVIRNEPCSJYNYAKWHZUIRLARWWLXMVOHHJZJOWPAKCVFRVCTWQGOCIBY9ZENDPUR"
-              }
-       }
-       ```
-       The `iota.seed` should be the IOTA seed generated at point 2
+   ```json
+   {
+      "iota": {
+          "seed": "P9LSRMEPXTBRFQTDVVVIRNEPCSJYNYAKWHZUIRLARWWLXMVOHHJZJOWPAKCVFRVCTWQGOCIBY9ZENDPUR"
+          }
+   }
+   ```
+    The `iota.seed` should be the IOTA seed generated at point 2
 4. (Optional) You can mess with the CROWS settings like payment interval, logging level or IOTA remote node and security. Just look at `config/default.json` and override the relevant parts in `config/local.json`
 5. Start the server with
     ```bash
